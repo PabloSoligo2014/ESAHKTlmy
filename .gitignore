@@ -1,0 +1,17 @@
+*.pyc
+__pycache__/
+*.zip
+*.tar.gz
+*.aux
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.eps
+*.bbl
+*.fdb_latexmk
+*.fls
+data/ESA-Mission1/telecommands.csv
+data/ESA-Mission1/labels.csv
+data/ESA-Mission1/channels.csv
+data/ESA-Mission1/anomaly_types.csv
