@@ -2,8 +2,7 @@
 Canales recomendados para la familiarizacion "These are channels 41-46 from subsystem 5 for Mission1" se pueden analizar aislados del resto</BR>
 Ojo que dice : simpler models, and potential on-board applications el paper de kotowsky
 Chequear el siguiente script: script infer_anomaly_types.py
-High false positive rate is reported in the literature as 
-the main obstacle to the wider adoption of anomaly detection algorithms in space operations
+High false positive rate is reported in the literature as the main obstacle to the wider adoption of anomaly detection algorithms in space operations
 Salvo  TACTiS todo necesita resampleo, estudiar TACTiS
 The zero-order hold interpolation (propagating the last known value) is recommended for satellite telemetry in the OXI annotation tool
 non-target channels son aquellos que no pueden tener anomalias como un flags, contadores, o location.

@@ -3,6 +3,8 @@ import zipfile
 import numpy as np
 from statsmodels.tsa.statespace.sarimax import SARIMAX
 from CustomTransformers import TimeSeriesFreqRegularization
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 def get_dataset_folder():
     return '../../data/'
@@ -161,3 +163,46 @@ class SingleTlmyManager:
         df_anomalies = df_anomalies.reset_index()
         
         return df_anomalies[df_anomalies.anomalyId != np.nan]
+    
+
+
+
+def split_and_scale_3d(X, y, test_size=0.2, shuffle=False, scaler_cls=StandardScaler):
+    """
+    Divide y escala un array 3D para modelos como LSTM sin fuga de datos.
+    
+    Parámetros
+    ----------
+    X : np.ndarray
+        Array de entrada con forma (n_muestras, time_steps, n_features)
+    y : np.ndarray
+        Etiquetas, 1D o 2D
+    test_size : float
+        Proporción de test (default=0.2)
+    shuffle : bool
+        Si True mezcla las muestras (para series de tiempo usar False)
+    scaler_cls : class
+        Clase de escalador de sklearn (ej. StandardScaler o MinMaxScaler)
+    
+    Retorna
+    -------
+    X_train_scaled, X_test_scaled, y_train, y_test, scaler
+    """
+    # 1️⃣ División
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=test_size, shuffle=shuffle
+    )
+    
+    # 2️⃣ Ajuste del escalador solo con entrenamiento
+    n_train, time_steps, n_features = X_train.shape
+    scaler = scaler_cls()
+    X_train_2d = X_train.reshape(-1, n_features)
+    scaler.fit(X_train_2d)
+    
+    # 3️⃣ Transformación manteniendo forma original
+    X_train_scaled = scaler.transform(X_train_2d).reshape(n_train, time_steps, n_features)
+    
+    n_test = X_test.shape[0]
+    X_test_scaled = scaler.transform(X_test.reshape(-1, n_features)).reshape(n_test, time_steps, n_features)
+    
+    return X_train_scaled, X_test_scaled, y_train, y_test, scaler
